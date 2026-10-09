@@ -8,6 +8,7 @@ extern "C" {
 Pthread APS5_VABI pthread_self_nid_postfix(void);
 int APS5_VABI pthread_rename_np_nid_postfix(Pthread thread, const char* name);
 int APS5_VABI pthread_getname_np_nid_postfix(Pthread thread, char* name);
+void APS5_VABI pthread_set_name_np_nid_postfix(Pthread thread, const char* name);
 int APS5_VABI scePthreadCreate(Pthread* thread, const PthreadAttr* attr, PthreadEntry entry, void* arg, const char* name);
 int APS5_VABI scePthreadJoin(Pthread thread, void** retval);
 }
@@ -48,4 +49,10 @@ int main() {
     const auto untouched = Read(nullptr, GUEST_ESRCH);
     for (unsigned char byte : untouched) Require(byte == 0xAA);
     Require(pthread_getname_np_nid_postfix(self, nullptr) == GUEST_EFAULT);
+
+    pthread_set_name_np_nid_postfix(self, "set-name-test");
+    RequireName(self, "set-name-test");
+    pthread_set_name_np_nid_postfix(self, nullptr);
+    RequireName(self, "");
+    pthread_set_name_np_nid_postfix(nullptr, "ignored");
 }
