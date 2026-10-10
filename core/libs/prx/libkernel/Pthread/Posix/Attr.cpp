@@ -124,3 +124,4 @@ int APS5_VABI pthread_attr_setsolosched_np_nid_postfix(PthreadAttr* attr, int so
 }
 
 }
+
