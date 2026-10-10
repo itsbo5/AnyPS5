@@ -28,6 +28,7 @@ int APS5_VABI memmove_s_nid_postfix(void*, std::size_t, const void*, std::size_t
 int APS5_VABI memset_s_nid_postfix(void*, std::size_t, int, std::size_t);
 char* APS5_VABI strnstr_nid_postfix(const char*, const char*, std::size_t);
 int APS5_VABI snprintf_s_nid_postfix(char*, std::size_t, const char*, ...);
+int APS5_VABI snwprintf_s_nid_postfix(char16_t*, std::size_t, const char16_t*, ...);
 int APS5_VABI sscanf_s_nid_postfix(const char*, const char*, ...);
 int APS5_VABI __inet_aton_nid_postfix(const char*, void*);
 std::uint32_t APS5_VABI __inet_addr_nid_postfix(const char*);
@@ -88,6 +89,8 @@ static void CheckBoundsCheckedFunctions() {
     Require(strnstr_nid_postfix(haystack, "st", 6) == haystack + 3);
     char formatted[8];
     Require(snprintf_s_nid_postfix(formatted, sizeof(formatted), "%d-%s", 42, "x") == 4 && std::strcmp(formatted, "42-x") == 0);
+    char16_t wideFormatted[8];
+    Require(snwprintf_s_nid_postfix(wideFormatted, sizeof(wideFormatted) / sizeof(char16_t), u"%d-%s", 42, "x") == 4 && wideFormatted[0] == u'4' && wideFormatted[1] == u'2' && wideFormatted[2] == u'-' && wideFormatted[3] == u'x' && wideFormatted[4] == 0);
 }
 
 static void CheckSscanfS() {
